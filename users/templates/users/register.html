@@ -1,0 +1,18 @@
+{% extends 'template/template.html' %}
+{% load crispy_forms_tags %}
+{% block title %}CheckList - Sign Up{% endblock title %}
+{% block body %}
+<div class="container shadow-lg mt-2 p-3 rounded border w-25 mx-auto">
+	<div class="mx-auto">
+		<h4>Sign Up</h4>
+	</div>
+	<form method="post">
+		{% csrf_token %}
+		{{form|crispy}}
+		<div class="mx-auto w-25">
+			<input class="btn btn-success" type="submit" name="Sign Up" value="Sign Up">
+		</div>
+	</form>
+
+</div>
+{% endblock body %}

@@ -1,0 +1,16 @@
+{% extends 'template/template.html' %}
+{% load crispy_forms_tags %}
+{% block title %}CheckList - Login{% endblock title %}
+{% block body %}
+<div class="container shadow-lg mt-2 p-3 border rounded w-25 mx-auto">
+	<div class="mx-auto">
+		<h4>Login</h4>
+	</div>
+	<form method="post">
+		{% csrf_token %}
+		{{form|crispy}}
+		<input class="btn btn-success" type="submit" name="login" value="Login">
+	</form>
+
+</div>
+{% endblock body %}
