@@ -4,7 +4,7 @@ from django import forms
 
 
 class TemplateForm(forms.ModelForm):
-
+	title = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder':'Title', 'id':'js-template-title'}))
 	class Meta:
 		model = Template
 		fields = ['title']

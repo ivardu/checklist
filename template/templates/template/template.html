@@ -15,13 +15,16 @@
 	<!-- Nav Bar -->
 	<!-- <div class="nav nav-bar"> -->
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand " href="">Checklist</a>
+			<a class="navbar-brand " href="{% url 'home' %}">Checklist</a>
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
 			    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 			      
 			    </ul>
 			    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-			    	{% if user.is_authenticated %}	
+			    	{% if user.is_authenticated %}
+			    	<li class="nav-item">
+			    		<a class="nav-link" href="{% url 'checklist' %}">Create_Template</a>
+			    	</li>	
 			    	<li class="nav-item">
 			    		<a class="nav-link" href="{% url 'logout' %}">Logout</a>
 			    	</li>
