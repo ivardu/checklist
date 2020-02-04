@@ -1,12 +1,84 @@
 {% extends 'template/template.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 {% block body %}
 <div class="container w-50">
-	<div class="mx-auto">
-		<form method='post'>
+	<div class="shadow-lg bg-white p-3 mt-2 mx-auto">
+		{% block javascript %}
+			<script type="text/javascript">
+				$(document).ready(function(){
+					$("#js-template-title").mouseleave(function(e){
+					// e.preventDefault();
+					$.ajax({
+						type:'POST',
+						url:'{% url "checklist" %}',
+						data:{
+							title:$('#title').val(),
+							csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+							action:'post',
+						},
+						success: function(response){
+							$("#title").val(data['title']);
+						},
+						error: function(xhr,errmsg,err){
+							console.log(xhr.status+":"+xhr.responseText);
+						}
+					});
+				});
+			});
+			</script>
+			<script type="text/javascript">
+				$(document).on('submit','js-temp-date', function(e) {
+					e.preventDefault();
+					$.ajax({
+						type:'POST',
+						url:'{%url "checklist" %}',
+						data:{
+							item:$('#item').val(),
+							status:$('#status').val(),
+							csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+							action:'post'
+						},
+						success: function(response){
+							$("#js-temp-data").trigger('reset');
+							$('#js-temp-data').focus();
+						},
+						error: function(response){
+							alert(response["responseJSON"]["error"])
+						}
+					});
+				});
+			</script>
+
+		{% endblock javascript %}
+			<form method='post' id='js-title-form' class="form-inline p-1 m-1">
+				<div class="form-row">
+					<div class="col">
+						{% csrf_token %}
+						{{temp_form|crispy}}
+					</div>
+<!-- 					<div class="col">
+						<input class="" type="image" src="{% static 'components/tick.jpg' %}" alt="submit" width="30" height="30">
+					</div> -->
+				</div>
+			</form>
+		<form method='post' id='js-temp-data'>
 			{% csrf_token %}
-			{{temp_form|crispy}}
-			{{temp_data_form|crispy}}
+			{% for hidden_field in temp_data_form.hidden_fields %}
+				{{hidden_field.errors}}
+				{{hidden_field}}
+			{% endfor %}
+			{% for field in temp_data_form.visible_fields %}
+			<div class="form-row align-items-center">
+				<div class="col-sm-3">
+					{{field.label_tag}}
+					{{field.errors}}
+					{{field}}
+					{{field.help_text}}
+				</div>
+			</div>
+			{% endfor %}
+
 			<input type="submit" name="add" value="Add">
 		</form>
 	</div>
