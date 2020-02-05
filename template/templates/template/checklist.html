@@ -4,21 +4,76 @@
 {% block body %}
 <div class="container w-50">
 	<div class="shadow-lg bg-white p-3 mt-2 mx-auto">
-		{% block javascript %}
+
+			<form method='post' id='js-title-form' class="form-inline p-1 m-1">
+				<div class="form-row">
+					<div class="col">
+						{% csrf_token %}
+						{{temp_form|crispy}}
+						<input type="hidden" id='js_template_id' name="" value="{{temp_obj_for_template.id}}">
+					</div>
+<!-- 					<div class="col">
+						<input class="" type="image" src="{% static 'components/tick.jpg' %}" alt="submit" width="30" height="30">
+					</div> -->
+				</div>
+			</form>
+		<form method='post' id='js-temp-data'>
+			{% csrf_token %}
+			{% for hidden_field in temp_data_form.hidden_fields %}
+				{{hidden_field.errors}}
+				{{hidden_field}}
+			{% endfor %}
+			<div class="form-row align-items-center">
+			{% for field in temp_data_form.visible_fields %}
+			
+				<div class="col-auto">
+					{{field.label_tag}}
+					{{field.errors}}
+					{{field}}
+					{{field.help_text}}
+				</div>
+		
+			{% endfor %}
+				<div class="col-auto">
+				<input type="hidden" id='js_template_id' name="" value="{{temp_obj_for_template.id}}">
+				<input type="submit" name="add" value="Add">
+				</div>
+			</div>
+		</form>
+	</div>
+	{% for item in template %}
+		<h6>{{item.title}}</h6>
+		<hr>
+		<h6>
+			{% for tdata in item.user.tempdata_set.all %}
+				<small>
+					{{tdata.item}}
+					{{tdata.status}}
+				</small>
+			{% endfor %}
+		</h6>
+	{% endfor %}
+</div>
+{% endblock body %}
+{% block javascript %}
 			<script type="text/javascript">
 				$(document).ready(function(){
-					$("#js-template-title").mouseleave(function(e){
-					// e.preventDefault();
+					$("#js_template_title").blur(function(e){
+					e.preventDefault();
+					$('#js_template_title').attr('readonly', 'true'); // mark it as read only
+    				$('#js_template_title').css('background-color' , '#DEDEDE'); // change the background color
 					$.ajax({
 						type:'POST',
 						url:'{% url "checklist" %}',
 						data:{
-							title:$('#title').val(),
+							title:$('#js_template_title').val(),
+							id:$("#js_template_id").val(),
 							csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
 							action:'post',
+
 						},
 						success: function(response){
-							$("#title").val(data['title']);
+							$("#js_template_title").html(response);
 						},
 						error: function(xhr,errmsg,err){
 							console.log(xhr.status+":"+xhr.responseText);
@@ -51,48 +106,3 @@
 			</script>
 
 		{% endblock javascript %}
-			<form method='post' id='js-title-form' class="form-inline p-1 m-1">
-				<div class="form-row">
-					<div class="col">
-						{% csrf_token %}
-						{{temp_form|crispy}}
-					</div>
-<!-- 					<div class="col">
-						<input class="" type="image" src="{% static 'components/tick.jpg' %}" alt="submit" width="30" height="30">
-					</div> -->
-				</div>
-			</form>
-		<form method='post' id='js-temp-data'>
-			{% csrf_token %}
-			{% for hidden_field in temp_data_form.hidden_fields %}
-				{{hidden_field.errors}}
-				{{hidden_field}}
-			{% endfor %}
-			{% for field in temp_data_form.visible_fields %}
-			<div class="form-row align-items-center">
-				<div class="col-sm-3">
-					{{field.label_tag}}
-					{{field.errors}}
-					{{field}}
-					{{field.help_text}}
-				</div>
-			</div>
-			{% endfor %}
-
-			<input type="submit" name="add" value="Add">
-		</form>
-	</div>
-	{% for item in template %}
-		<h6>{{item.title}}</h6>
-		<hr>
-		<h6>
-			{% for tdata in item.user.tempdata_set.all %}
-				<small>
-					{{tdata.item}}
-					{{tdata.status}}
-				</small>
-			{% endfor %}
-		</h6>
-	{% endfor %}
-</div>
-{% endblock body %}

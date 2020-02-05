@@ -4,6 +4,12 @@ from django.conf import settings
 
 # Create your models here.
 
+CHOICES = (
+	('Y','Yet To Start'),
+	('I','In Progress'),
+	('C','Completed'),
+
+)
 
 class Template(models.Model):
 	title = models.CharField(max_length=255)
@@ -21,7 +27,7 @@ class Template(models.Model):
 
 class TempData(models.Model):
 	item = models.CharField(max_length=255)
-	status = models.CharField(max_length=20)
+	status = models.CharField(max_length=1, choices=CHOICES)
 	template = models.ForeignKey(Template, on_delete=models.CASCADE)
 
 
