@@ -29,14 +29,22 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def template_view(request):
 	# Temporary Display of the template names 
-	template = Template.objects.filter(user=request.user)
-	latest_template_obj = '' 
+	template = Template.objects.filter(user=request.user) 
 
 	if request.method == 'POST':
 		temp_form = TemplateForm(request.POST)
 		temp_data_form = TemplateDataForm(request.POST)
+		print(request.POST)
 
-		if temp_form.is_valid():
+		if request.POST.get('id'):
+			# getting id of the current template 
+			existing_template = Template.objects.filter(id=request.POST.get('id'))[0]
+
+		if existing_template:
+			existing_template.title = request.POST.get('title')
+			existing_template.save()
+
+		elif temp_form.is_valid():
 			# Template Title and User
 			latest_template_obj = temp_form.save(commit=False)
 			latest_template_obj.user = request.user
@@ -52,14 +60,21 @@ def template_view(request):
 			
 			# Template items alias data
 			td_obj = temp_data_form.save(commit=False)
-			td_obj.template = latest_template
+			td_obj.template = existing_template
 			td_obj.save()
 
 			return HttpResponseRedirect(reverse('checklist'))
 
 	else:
-		temp_form = TemplateForm()
+		
 		temp_data_form = TemplateDataForm()
+		if template.filter(title='Untitled'):
+			temp_obj_for_template = template.filter(title='Untitled')[0]
+			temp_form = TemplateForm(instance=temp_obj_for_template)
+
+		else:
+			temp_obj_for_template = Template.objects.create(title='Untitled', user=request.user)
+			temp_form = TemplateForm(instance=temp_obj_for_template)
 
 	return render(request, 'template/checklist.html', locals())
 
