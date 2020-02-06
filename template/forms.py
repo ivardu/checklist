@@ -11,7 +11,7 @@ class TemplateForm(forms.ModelForm):
 
 
 class TemplateDataForm(forms.ModelForm):
-	status = forms.ChoiceField(choices=CHOICES)
+	status = forms.ChoiceField(label='', choices=CHOICES, widget=forms.TextInput(attrs={"class":"form-control-range", "id":"formControlRange"}))
 	class Meta:
 		model = TempData
 		fields = ['item','status']
