@@ -60,7 +60,7 @@
 				$(document).ready(function(){
 					$("#js_template_title").blur(function(e){
 					e.preventDefault();
-					$('#js_template_title').attr('readonly', 'true'); // mark it as read only
+					// $('#js_template_title').attr('readonly', 'true'); // mark it as read only
     				$('#js_template_title').css('background-color' , '#DEDEDE'); // change the background color
 					$.ajax({
 						type:'POST',
@@ -103,6 +103,11 @@
 						}
 					});
 				});
+			</script>
+			<script>
+			$(function(){
+				$("#formControlRange").slider();
+			});
 			</script>
 
 		{% endblock javascript %}
