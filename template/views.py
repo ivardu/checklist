@@ -34,7 +34,7 @@ def template_view(request):
 	if request.method == 'POST':
 		temp_form = TemplateForm(request.POST)
 		temp_data_form = TemplateDataForm(request.POST)
-		print(request.POST)
+		# print(request.POST)
 
 		if request.POST.get('id'):
 			# getting id of the current template 

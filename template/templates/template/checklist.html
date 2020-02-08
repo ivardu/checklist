@@ -56,58 +56,71 @@
 </div>
 {% endblock body %}
 {% block javascript %}
-			<script type="text/javascript">
-				$(document).ready(function(){
-					$("#js_template_title").blur(function(e){
-					e.preventDefault();
-					// $('#js_template_title').attr('readonly', 'true'); // mark it as read only
-    				$('#js_template_title').css('background-color' , '#DEDEDE'); // change the background color
-					$.ajax({
-						type:'POST',
-						url:'{% url "checklist" %}',
-						data:{
-							title:$('#js_template_title').val(),
-							id:$("#js_template_id").val(),
-							csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
-							action:'post',
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#js_template_title").blur(function(e){
+			e.preventDefault();
+			// $('#js_template_title').attr('readonly', 'true'); // mark it as read only
+			$('#js_template_title').css('background-color' , '#DEDEDE'); // change the background color
+			$.ajax({
+				type:'POST',
+				url:'{% url "checklist" %}',
+				data:{
+					title:$('#js_template_title').val(),
+					id:$("#js_template_id").val(),
+					csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+					action:'post',
 
-						},
-						success: function(response){
-							$("#js_template_title").html(response);
-						},
-						error: function(xhr,errmsg,err){
-							console.log(xhr.status+":"+xhr.responseText);
-						}
-					});
-				});
+				},
+				success: function(response){
+					$("#js_template_title").html(response);
+				},
+				error: function(xhr,errmsg,err){
+					console.log(xhr.status+":"+xhr.responseText);
+				}
 			});
-			</script>
-			<script type="text/javascript">
-				$(document).on('submit','js-temp-date', function(e) {
-					e.preventDefault();
-					$.ajax({
-						type:'POST',
-						url:'{%url "checklist" %}',
-						data:{
-							item:$('#item').val(),
-							status:$('#status').val(),
-							csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
-							action:'post'
-						},
-						success: function(response){
-							$("#js-temp-data").trigger('reset');
-							$('#js-temp-data').focus();
-						},
-						error: function(response){
-							alert(response["responseJSON"]["error"])
-						}
-					});
-				});
-			</script>
-			<script>
-			$(function(){
-				$("#formControlRange").slider();
+		});
+	});
+	</script>
+	<script type="text/javascript">
+		$(document).on('submit','js-temp-date', function(e) {
+			e.preventDefault();
+			$.ajax({
+				type:'POST',
+				url:'{% url "checklist" %}',
+				data:{
+					item:$('#item').val(),
+					status:$('#status').val(),
+					csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+					action:'post'
+				},
+				success: function(response){
+					$("#js-temp-data").trigger('reset');
+					$('#js-temp-data').focus();
+				},
+				error: function(response){
+					alert(response["responseJSON"]["error"])
+				}
 			});
-			</script>
+		});
+	</script>
+	<script>
+	var inc = {
+		0:'ABCD',
+		10:'BCD',
+		20:'DEF',
+	}
+	$(document).ready(function(){
+		$("#formControlRange").slider({
+			// min:$("#formControlRange").val(),
+			// value:0,
+			// max:$("#formControlRange").val(),
+			step:10,
+			slide:function(event, ui){
+				$("#formControlRange").val(inc[ui.value]);
+			}
+			});
+	});
+	</script>
 
-		{% endblock javascript %}
+{% endblock javascript %}
