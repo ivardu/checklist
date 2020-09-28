@@ -1,0 +1,5 @@
+form#js-title-form div.form-row div.col input.no-border{
+	border: 0;
+	box-shadow: none;
+	border-bottom: 5px solid red;
+}

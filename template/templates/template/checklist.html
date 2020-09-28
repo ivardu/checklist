@@ -9,7 +9,7 @@
 				<div class="form-row">
 					<div class="col">
 						{% csrf_token %}
-						{{temp_form|crispy}}
+						{{temp_form}}
 						<input type="hidden" id='js_template_id' name="" value="{{temp_obj_for_template.id}}">
 					</div>
 <!-- 					<div class="col">
@@ -36,7 +36,7 @@
 			{% endfor %}
 				<div class="col-auto">
 				<input type="hidden" id='js_template_id' name="" value="{{temp_obj_for_template.id}}">
-				<input type="submit" name="add" value="Add">
+				<input type="image" name="add" value="Add" src="{% static 'components/plus1.png' %}" height="25" width="25">
 				</div>
 			</div>
 		</form>
@@ -61,7 +61,7 @@
 			$("#js_template_title").blur(function(e){
 			e.preventDefault();
 			// $('#js_template_title').attr('readonly', 'true'); // mark it as read only
-			$('#js_template_title').css('background-color' , '#DEDEDE'); // change the background color
+			// $('#js_template_title').css('background-color' , '#DEDEDE'); // change the background color
 			$.ajax({
 				type:'POST',
 				url:'{% url "checklist" %}',
